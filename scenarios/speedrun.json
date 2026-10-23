@@ -1,0 +1,42 @@
+{
+  "id": "speedrun",
+  "version": 1,
+  "minecraft": "1.16.1",
+  "seed": "2483313382402348964",
+  "difficulty": "peaceful",
+  "durationSeconds": 1800,
+  "observationRadius": 24,
+  "maxActionSeconds": 10,
+  "maxCalls": 1000,
+  "maxOutputTokens": 2048,
+  "historyTurns": 24,
+  "category": "documented speedrun seed / structured observations / supplied landmarks",
+  "description": "Documented Java 1.16.1 set-seed speedrun world. Start with an empty inventory, defeat the Ender Dragon, then enter the exit portal. Peaceful difficulty: no hostile mobs spawn, so blaze rods and Ender Pearls cannot be obtained. The stronghold's End portal has one naturally active portal block (supplied landmark); filling frames is not required.",
+  "landmarks": [
+    { "name": "Taiga village (beds, chests, iron golem)", "dimension": "overworld", "position": [-320, 72, 256] },
+    { "name": "Ruined portal beside the village (incomplete obsidian frame, loot chest)", "dimension": "overworld", "position": [-350, 77, 292] },
+    { "name": "Stronghold End portal room: this portal block is already active", "dimension": "overworld", "position": [1007, 24, 1152] }
+  ],
+  "ladder": ["wood", "craftingTable", "pickaxe", "landmark2", "enteredEnd", "dragonDamaged", "dragonHalf", "dragonDead", "exitEnd"],
+  "score": [
+    {"checkpoint": "landmark2", "partial": {"approach": 2}},
+    {"checkpoint": "enteredEnd"},
+    {"checkpoint": "dragonDead", "partial": "dragonDamage"},
+    {"checkpoint": "exitEnd"}
+  ],
+  "endCrystals": [
+    {"base":[-13,94,39],"position":[-12.5,95,39.5]},
+    {"base":[12,91,39],"position":[12.5,92,39.5]},
+    {"base":[42,76,0],"position":[42.5,77,0.5]},
+    {"base":[33,100,24],"position":[33.5,101,24.5]},
+    {"base":[33,88,-25],"position":[33.5,89,-24.5]},
+    {"base":[-34,79,24],"position":[-33.5,80,24.5]},
+    {"base":[-42,82,-1],"position":[-41.5,83,-0.5]},
+    {"base":[-13,103,-40],"position":[-12.5,104,-39.5]},
+    {"base":[12,97,-40],"position":[12.5,98,-39.5]},
+    {"base":[-34,85,-25],"position":[-33.5,86,-24.5]}
+  ],
+  "calibration": "exploratory: 30-minute cap chosen to observe how far a model gets; not a calibrated completion time",
+  "source": "Seed audited locally on the official 1.16.1 server: data/calibration/seed-2483313382402348964-1.16.1.json",
+  "variant": { "kind": "base" }
+}

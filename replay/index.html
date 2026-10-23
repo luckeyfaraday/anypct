@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run Replay</title>
+<style>
+  :root{--bg:#0e1310;--panel:rgba(14,19,16,.86);--line:#2a3a2e;--text:#e6efe7;--dim:#93a597;--accent:#9cff57;--warn:#ffb648;--bad:#ff6b6b;--cyan:#45d6ff}
+  @media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#f2f5f1;--panel:rgba(255,255,255,.9);--line:#cfd9d0;--text:#152016;--dim:#536455;--accent:#2f8f12;--warn:#a86400;--bad:#c23030;--cyan:#0a7fa5}}
+  :root[data-theme="dark"]{--bg:#0e1310;--panel:rgba(14,19,16,.86);--line:#2a3a2e;--text:#e6efe7;--dim:#93a597;--accent:#9cff57;--warn:#ffb648;--bad:#ff6b6b;--cyan:#45d6ff}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif}
+  canvas{display:block}
+  .mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;letter-spacing:.02em}
+  .panel{position:fixed;background:var(--panel);border:1px solid var(--line);border-radius:10px;backdrop-filter:blur(6px);z-index:10}
+  #title{top:12px;left:12px;padding:10px 14px;max-width:min(460px,calc(100vw - 24px))}
+  #title h1{margin:0;font-size:15px;font-weight:600}
+  #title .sub{color:var(--dim)}
+  #hud{top:12px;right:12px;padding:10px 14px;width:260px}
+  #hud dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:0}
+  #hud dt{color:var(--dim)} #hud dd{margin:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #checkpoints{margin-top:8px;display:flex;flex-wrap:wrap;gap:4px}
+  .chip{padding:1px 6px;border:1px solid var(--line);border-radius:999px;color:var(--dim)}
+  .chip.on{color:var(--accent);border-color:var(--accent)}
+  #message{left:12px;bottom:92px;padding:10px 14px;max-width:min(520px,calc(100vw - 24px));max-height:30vh;overflow:auto;white-space:pre-wrap}
+  #message .who{color:var(--accent);margin-bottom:2px}
+  #bar{left:12px;right:12px;bottom:12px;padding:10px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+  button{background:transparent;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:5px 10px;font:inherit;cursor:pointer}
+  button.on{border-color:var(--accent);color:var(--accent)}
+  #track{position:relative;flex:1 1 240px;height:28px}
+  #scrub{position:absolute;inset:0;width:100%;margin:0;accent-color:var(--accent)}
+  .tick{position:absolute;top:0;width:2px;height:8px;background:var(--cyan);pointer-events:none}
+  .tick.death{background:var(--bad);height:12px}
+  #time{min-width:110px;text-align:center}
+  .group{display:flex;gap:4px}
+  #picker{position:fixed;inset:0;overflow:auto;padding:24px 16px;display:none}
+  #picker h1{font-size:20px;margin:0 0 12px}
+  #picker a{display:block;padding:10px 12px;margin-bottom:6px;border:1px solid var(--line);border-radius:8px;color:var(--text);text-decoration:none}
+  #picker a span{color:var(--dim)}
+  #status{left:50%;top:50%;transform:translate(-50%,-50%);padding:12px 16px;display:none}
+  @media (max-width:640px){#hud{width:auto;left:12px;top:auto;bottom:150px}#hud dl{grid-template-columns:auto 1fr auto 1fr}#message{display:none}}
+</style>
+</head>
+<body>
+<div id="picker"><h1>Run replays</h1><p class="mono" style="color:var(--dim)">Pick an evaluation run to watch in 3D.</p><div id="list"></div></div>
+<div id="title" class="panel" hidden><h1 id="model">Loading…</h1><div id="sub" class="sub mono"></div></div>
+<div id="hud" class="panel mono" hidden>
+  <dl>
+    <dt>Dimension</dt><dd id="dim">—</dd>
+    <dt>Health</dt><dd id="health">—</dd>
+    <dt>Holding</dt><dd id="held">—</dd>
+    <dt>Action</dt><dd id="action">—</dd>
+    <dt>Dragon</dt><dd id="dragon">—</dd>
+    <dt>Deaths</dt><dd id="deaths">0</dd>
+  </dl>
+  <div id="checkpoints"></div>
+</div>
+<div id="message" class="panel" hidden><div class="who mono">MODEL</div><div id="said"></div></div>
+<div id="bar" class="panel mono" hidden>
+  <button id="play" title="Play / pause (space)">Pause</button>
+  <span id="time">0:00 / 0:00</span>
+  <div id="track"><input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Replay position"></div>
+  <div class="group" id="speeds"></div>
+  <div class="group" id="cameras"></div>
+</div>
+<div id="status" class="panel mono"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);
+const run=params.get('run');
+const fmt=ms=>{const s=Math.max(0,Math.floor(ms/1000));return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;};
+const labels={wood:'Log',craftingTable:'Table',pickaxe:'Pickaxe',stonePickaxe:'Stone pick',ironIngot:'Iron',bed:'Bed',bucket:'Bucket',flintAndSteel:'Flint & steel',
+  blazeRod:'Blaze rod',enderPearl:'Pearl',enderEye:'Eye',enteredNether:'Nether',enteredEnd:'End',dragonSeen:'Dragon seen',dragonDamaged:'Dragon hit',dragonHalf:'Dragon ½',dragonDead:'Dragon killed',exitEnd:'Exit'};
+const status=text=>{$('status').textContent=text;$('status').style.display=text?'block':'none';};
+if(!run){
+  $('picker').style.display='block';
+  fetch('/api/runs').then(r=>r.json()).then(({runs})=>{
+    if(!runs.length){$('list').textContent='No evaluation runs with a saved world yet.';return;}
+    for(const r of runs){const a=document.createElement('a');a.href=`?run=${encodeURIComponent(r.id)}`;
+      a.innerHTML=`<strong></strong><br><span class="mono"></span>`;a.querySelector('strong').textContent=r.model;
+      a.querySelector('span').textContent=`${r.scenario} · ${r.outcome}${r.progress!==null?` · ${Math.round(r.progress*100)}% route`:''} · ${new Date(r.createdAt).toLocaleString()}`;$('list').append(a);}
+  });
+}else{
+  // A per-tab id pairs this page's control socket with the viewer bundle's socket (via its Referer).
+  const tab=params.get('tab')||(crypto.randomUUID?.()??String(Math.random()).slice(2)+Date.now());
+  if(!params.get('tab')){params.set('tab',tab);history.replaceState(null,'',`?${params}`);}
+  const camera=params.get('camera')||'chase';
+  for(const id of ['title','hud','bar'])$(id).hidden=false;
+  status('Loading run and world…');
+  const socket=io({query:{role:'control',run,tab,camera}});
+  const send=c=>socket.emit('control',c);
+  let meta=null,hud=null,dragging=false;
+  for(const s of [1,4,8,16,32]){const b=document.createElement('button');b.textContent=`${s}×`;b.dataset.speed=s;b.onclick=()=>send({cmd:'speed',speed:s});$('speeds').append(b);}
+  for(const [c,label] of [['chase','Chase'],['first','First person'],['overhead','Overhead']]){const b=document.createElement('button');b.textContent=label;b.dataset.camera=c;b.onclick=()=>send({cmd:'camera',camera:c});$('cameras').append(b);}
+  $('play').onclick=()=>send({cmd:'toggle'});
+  $('scrub').addEventListener('input',()=>{dragging=true;if(meta)$('time').textContent=`${fmt($('scrub').value/1000*meta.duration)} / ${fmt(meta.duration)}`;});
+  $('scrub').addEventListener('change',()=>{dragging=false;if(meta)send({cmd:'seek',t:$('scrub').value/1000*meta.duration});});
+  addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'&&e.key!==' ')return;
+    if(e.key===' '){e.preventDefault();send({cmd:'toggle'});}
+    if(hud&&e.key==='ArrowRight')send({cmd:'seek',t:hud.t+10000});
+    if(hud&&e.key==='ArrowLeft')send({cmd:'seek',t:hud.t-10000});});
+  socket.on('failure',m=>status(`Replay failed: ${m}`));
+  socket.on('meta',m=>{
+    meta=m;$('model').textContent=m.model;
+    $('sub').textContent=`${m.scenario} · ${m.outcome}${m.progress?` · route ${m.progress.reached.length}/${m.progress.route.length}`:''} · world changes ${m.changeSource}`;
+    document.title=`Replay · ${m.model}`;
+    const track=$('track');
+    for(const x of m.milestones){const tick=document.createElement('div');tick.className='tick';tick.style.left=`${x.t/m.duration*100}%`;tick.title=`${labels[x.name]??x.name} · ${fmt(x.t)}`;track.append(tick);}
+    for(const d of m.deaths){const tick=document.createElement('div');tick.className='tick death';tick.style.left=`${d/m.duration*100}%`;tick.title=`Death · ${fmt(d)}`;track.append(tick);}
+    status('');
+  });
+  socket.on('hud',h=>{
+    hud=h;if(!meta)return;
+    $('play').textContent=h.playing?'Pause':'Play';
+    if(!dragging){$('scrub').value=Math.round(h.t/h.duration*1000);$('time').textContent=`${fmt(h.t)} / ${fmt(h.duration)}`;}
+    for(const b of $('speeds').children)b.classList.toggle('on',Number(b.dataset.speed)===h.speed);
+    for(const b of $('cameras').children)b.classList.toggle('on',b.dataset.camera===h.camera);
+    $('dim').textContent=h.dimension.replace('the_','');
+    $('health').textContent=h.alive===false?'dead':`${Math.round(h.health)}/20`;$('health').style.color=h.health<=6?'var(--bad)':'';
+    $('held').textContent=h.heldItem??'—';
+    $('action').textContent=h.action?`${h.action.name}${h.action.args?.position?' '+h.action.args.position.map(Math.round).join(','):h.action.args?.item?' '+h.action.args.item:''}`:'—';
+    $('dragon').textContent=h.dragon?`${h.dragon.health??'?'}/200${h.dragon.visible?` · ${h.dragon.state} · ${h.dragon.distance}m`:''}`:'—';
+    $('deaths').textContent=h.deaths;
+    const reached=new Set(h.reached);$('checkpoints').replaceChildren(...meta.milestones.filter(m=>labels[m.name]).map(m=>{const c=document.createElement('span');c.className='chip'+(reached.has(m.name)?' on':'');c.textContent=labels[m.name];return c;}));
+    if(h.message){$('message').hidden=false;$('said').textContent=h.message.text;$('message').querySelector('.who').textContent=`MODEL · ${fmt(h.message.t)}`;}
+  });
+  const script=document.createElement('script');script.src='index.js';document.body.append(script);
+}
+</script>
+</body>
+</html>

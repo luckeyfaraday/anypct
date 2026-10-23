@@ -1,0 +1,36 @@
+{
+  "id": "speedrun-overworld",
+  "extends": "speedrun",
+  "snapshot": "speedrun",
+  "durationSeconds": 1200,
+  "category": "stage / Overworld route to the End / structured observations / supplied landmarks",
+  "objective": "enter the End alive",
+  "description": "Stage course on the documented Java 1.16.1 speedrun seed: the Overworld half of the speedrun course. Start with an empty inventory. Peaceful difficulty. The stronghold End portal has one naturally active portal block (supplied landmark). Java 1.16.1 keeps fall distance through an End portal. The course ends when you have been alive in the End for five seconds.",
+  "goal": {
+    "type": "milestone",
+    "name": "endSafe"
+  },
+  "ladder": [
+    "wood",
+    "craftingTable",
+    "pickaxe",
+    "landmark2",
+    "enteredEnd",
+    "endSafe"
+  ],
+  "score": [
+    {
+      "checkpoint": "landmark2",
+      "partial": {
+        "approach": 2
+      }
+    },
+    {
+      "checkpoint": "enteredEnd"
+    },
+    {
+      "checkpoint": "endSafe"
+    }
+  ],
+  "calibration": "exploratory: 20 minutes; not a calibrated completion time"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "speedrun-dragon-paused",
+  "extends": "speedrun-dragon",
+  "snapshot": "speedrun",
+  "clock": "paused",
+  "category": "stage / End fight from a fixed kit / paused clock / structured observations"
+}

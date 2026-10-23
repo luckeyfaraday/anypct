@@ -1,0 +1,40 @@
+{
+  "name": "minecraft-sprint-bench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A fixed-seed Minecraft planning benchmark with shared tools and an independent referee.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "bench": "node src/cli.mjs",
+    "bench:claude": "node scripts/run-claude.mjs",
+    "bench:codex": "node scripts/run-codex.mjs",
+    "bench:submit": "node community/submit.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "node scripts/check.mjs",
+    "ui": "node src/dashboard.mjs",
+    "replay": "node replay/server.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "smoke:milestones": "node scripts/milestone-smoke.mjs",
+    "smoke:dragon": "node scripts/dragon-smoke.mjs",
+    "audit:seed": "node scripts/audit-seed.mjs",
+    "smoke:stages": "node scripts/stage-smoke.mjs",
+    "smoke:neutral": "node scripts/neutral-smoke.mjs",
+    "audit:stages": "node scripts/audit-stages.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "express": "5.3.0",
+    "mineflayer": "4.39.0",
+    "mineflayer-pathfinder": "2.4.5",
+    "prismarine-nbt": "2.7.0",
+    "prismarine-viewer": "1.33.0",
+    "rcon-client": "4.2.5",
+    "socket.io": "4.8.4",
+    "vec3": "0.1.10",
+    "zod": "3.25.76",
+    "zod-to-json-schema": "3.25.1"
+  }
+}

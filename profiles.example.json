@@ -1,0 +1,4 @@
+[
+  { "name": "claude-opus-5-5", "api": "anthropic", "model": "claude-opus-5-5", "baseUrl": "https://api.anthropic.com/v1", "keyEnv": "ANTHROPIC_API_KEY", "options": { "output_config": { "effort": "high" } } },
+  { "name": "gpt-6-astra", "api": "chat-completions", "model": "gpt-6-astra", "baseUrl": "https://api.openai.com/v1", "keyEnv": "OPENAI_API_KEY", "maxTokensField": "max_completion_tokens", "options": { "reasoning_effort": "high" } }
+]

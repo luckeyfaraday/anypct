@@ -1,0 +1,9 @@
+{
+  "id": "speedrun-normal",
+  "extends": "speedrun",
+  "snapshot": "speedrun",
+  "difficulty": "normal",
+  "category": "tier 2 / documented speedrun seed on Normal difficulty / structured observations / supplied landmarks",
+  "description": "Documented Java 1.16.1 set-seed speedrun world on Normal difficulty. Start with an empty inventory, defeat the Ender Dragon, then enter the exit portal. Hostile mobs spawn at night and in the dark. The stronghold's End portal has one naturally active portal block (supplied landmark); filling frames is not required.",
+  "calibration": "exploratory: 30-minute cap; not a calibrated completion time"
+}

@@ -1,0 +1,83 @@
+{
+  "id": "speedrun-dragon",
+  "extends": "speedrun",
+  "snapshot": "speedrun",
+  "durationSeconds": 600,
+  "maxCalls": 400,
+  "category": "stage / End fight from a fixed kit / structured observations",
+  "objective": "defeat the Ender Dragon and enter its exit portal",
+  "description": "Stage course on the documented Java 1.16.1 speedrun seed. You start in the End on the obsidian arrival platform, having just come through the stronghold portal, with a fixed kit. Peaceful difficulty. If you die you respawn on the stronghold End portal frame in the Overworld without your items; stepping into the active portal block beside it returns you to the End.",
+  "landmarks": [
+    {
+      "name": "Stronghold End portal room: this portal block is already active",
+      "dimension": "overworld",
+      "position": [
+        1007,
+        24,
+        1152
+      ]
+    }
+  ],
+  "start": {
+    "portal": [
+      1007,
+      24,
+      1152
+    ],
+    "dimension": "the_end",
+    "kit": [
+      [
+        "iron_sword",
+        1
+      ],
+      [
+        "iron_pickaxe",
+        1
+      ],
+      [
+        "bow",
+        1
+      ],
+      [
+        "arrow",
+        64
+      ],
+      [
+        "cobblestone",
+        64
+      ],
+      [
+        "white_bed",
+        6
+      ],
+      [
+        "bread",
+        16
+      ]
+    ],
+    "spawnpoint": {
+      "dimension": "overworld",
+      "position": [
+        1006,
+        25,
+        1152
+      ]
+    }
+  },
+  "ladder": [
+    "dragonDamaged",
+    "dragonHalf",
+    "dragonDead",
+    "exitEnd"
+  ],
+  "score": [
+    {
+      "checkpoint": "dragonDead",
+      "partial": "dragonDamage"
+    },
+    {
+      "checkpoint": "exitEnd"
+    }
+  ],
+  "calibration": "exploratory: 10 minutes of End fight; not a calibrated completion time"
+}

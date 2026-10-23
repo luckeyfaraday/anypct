@@ -1,0 +1,7 @@
+{
+  "id": "speedrun-paused",
+  "extends": "speedrun",
+  "snapshot": "speedrun",
+  "clock": "paused",
+  "category": "documented speedrun seed / paused clock / structured observations"
+}

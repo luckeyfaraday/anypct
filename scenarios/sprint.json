@@ -1,0 +1,19 @@
+{
+  "id": "sprint",
+  "version": 1,
+  "minecraft": "1.16.5",
+  "seed": "8398967436125155523",
+  "difficulty": "peaceful",
+  "durationSeconds": 600,
+  "observationRadius": 24,
+  "maxActionSeconds": 10,
+  "maxCalls": 250,
+  "maxOutputTokens": 2048,
+  "historyTurns": 24,
+  "category": "set-seed sprint / structured observations / supplied landmark",
+  "description": "Start with empty inventory, defeat the Ender Dragon, then enter the exit portal. This course uses Peaceful difficulty and a naturally prefilled End portal; it does not test acquiring blaze rods or Ender Pearls.",
+  "landmarks": [{ "name": "Reported active End portal (candidate; verify during calibration)", "dimension": "overworld", "position": [-1130, 34, 856] }],
+  "calibration": "unvalidated",
+  "source": "https://github.com/rmalde/minecraft-agent",
+  "variant": { "kind": "base" }
+}

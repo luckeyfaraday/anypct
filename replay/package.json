@@ -1,0 +1,12 @@
+{
+  "name": "minecraft-bench-replay",
+  "private": true,
+  "type": "module",
+  "description": "3D replay of recorded Minecraft Bench runs. Separate package so the benchmark's dependency hash is unchanged.",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "prismarine-provider-anvil": "2.13.0"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "id": "sprint-turned",
+  "extends": "sprint",
+  "variant": { "kind": "spawn-yaw", "degrees": 180 },
+  "description": "Public calibration variant: same seed and supplies, opposite initial facing. This is not a held-out evaluation variant."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "progression",
+  "extends": "sprint",
+  "seed": "20261017",
+  "difficulty": "normal",
+  "category": "full-progression / fixed seed / structured observations",
+  "description": "Empty inventory, Normal difficulty, undisclosed structure locations. Ten minutes is a cutoff, not a claimed completion time. The seed is not yet calibrated.",
+  "landmarks": [],
+  "variant": { "kind": "base" }
+}

@@ -1,0 +1,92 @@
+{
+  "id": "speedrun-nether",
+  "extends": "speedrun",
+  "snapshot": "speedrun",
+  "difficulty": "easy",
+  "durationSeconds": 600,
+  "maxCalls": 400,
+  "category": "stage / blaze rods from a fortress spawner / structured observations / supplied landmark",
+  "objective": "hold six blaze rods",
+  "description": "Stage course on the documented Java 1.16.1 speedrun seed. You start in the Nether inside a fortress, near a blaze spawner, wearing iron armour and carrying a fixed kit. Easy difficulty: hostile mobs spawn and blazes drop blaze rods. If you die you respawn at the start without your items. The course ends when you hold six blaze rods at once.",
+  "landmarks": [
+    {
+      "name": "Nether fortress blaze spawner",
+      "dimension": "the_nether",
+      "position": [
+        -126,
+        70,
+        171
+      ]
+    }
+  ],
+  "endCrystals": [],
+  "start": {
+    "position": [
+      -134,
+      67,
+      171
+    ],
+    "dimension": "the_nether",
+    "yaw": -90,
+    "armor": [
+      [
+        "head",
+        "iron_helmet"
+      ],
+      [
+        "chest",
+        "iron_chestplate"
+      ],
+      [
+        "legs",
+        "iron_leggings"
+      ],
+      [
+        "feet",
+        "iron_boots"
+      ]
+    ],
+    "kit": [
+      [
+        "iron_sword",
+        1
+      ],
+      [
+        "iron_pickaxe",
+        1
+      ],
+      [
+        "cobblestone",
+        64
+      ],
+      [
+        "bread",
+        16
+      ]
+    ],
+    "spawnpoint": {
+      "dimension": "the_nether",
+      "position": [
+        -134,
+        67,
+        171
+      ]
+    }
+  },
+  "goal": {
+    "type": "items",
+    "item": "blaze_rod",
+    "count": 6
+  },
+  "ladder": [
+    "blazeRod",
+    "goal"
+  ],
+  "score": [
+    {
+      "checkpoint": "goal",
+      "partial": "goalItems"
+    }
+  ],
+  "calibration": "exploratory: 10 minutes; not a calibrated completion time"
+}

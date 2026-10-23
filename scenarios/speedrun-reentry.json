@@ -1,0 +1,86 @@
+{
+  "id": "speedrun-reentry",
+  "extends": "speedrun",
+  "snapshot": "speedrun",
+  "durationSeconds": 480,
+  "maxCalls": 400,
+  "category": "stage / return to the End through an existing shaft / structured observations",
+  "objective": "get back into the End alive",
+  "description": "Stage course on the documented Java 1.16.1 speedrun seed. You died in the End earlier and are back on the surface above the stronghold with a small kit. A one-block-wide shaft you dug earlier runs straight down from the surface beside you (y 77) through the portal room ceiling to the active End portal block (y 24). Peaceful difficulty. Java 1.16.1 keeps fall distance through an End portal, so damage from a fall into the portal is taken on arrival. If you die you respawn at the start. The course ends when you have been alive in the End for five seconds.",
+  "landmarks": [
+    {
+      "name": "Stronghold End portal room: this portal block is already active",
+      "dimension": "overworld",
+      "position": [
+        1007,
+        24,
+        1152
+      ]
+    }
+  ],
+  "start": {
+    "load": [
+      [
+        "overworld",
+        1007,
+        1152,
+        1007,
+        1152
+      ]
+    ],
+    "commands": [
+      "fill 1007 25 1152 1007 77 1152 minecraft:air"
+    ],
+    "position": [
+      1008,
+      78,
+      1152
+    ],
+    "dimension": "overworld",
+    "yaw": 90,
+    "kit": [
+      [
+        "stone_pickaxe",
+        1
+      ],
+      [
+        "cobblestone",
+        16
+      ],
+      [
+        "bread",
+        8
+      ]
+    ],
+    "spawnpoint": {
+      "dimension": "overworld",
+      "position": [
+        1008,
+        78,
+        1152
+      ]
+    }
+  },
+  "goal": {
+    "type": "milestone",
+    "name": "endSafe"
+  },
+  "ladder": [
+    "landmark0",
+    "enteredEnd",
+    "endSafe"
+  ],
+  "score": [
+    {
+      "checkpoint": "enteredEnd",
+      "partial": {
+        "approach": 0,
+        "metric": "3d"
+      }
+    },
+    {
+      "checkpoint": "endSafe"
+    }
+  ],
+  "calibration": "exploratory: 8 minutes; not a calibrated completion time"
+}
